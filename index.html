@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Surprise for You 🐰</title>
+    <!-- Bunny Web Icon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐰</text></svg>">
+    
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #fdf6f0;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Georgia', serif;
+        }
+
+        /* Start Button to make it feel interactive */
+        #start-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: #ffb7c5;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        #start-btn:hover {
+            background-color: #ff8fab;
+            transform: scale(1.05);
+        }
+
+        .hidden { display: none !important; }
+
+        /* The Greeting Text */
+        .greeting {
+            font-size: 2.5rem;
+            font-style: italic;
+            color: #6d4c41;
+            opacity: 0;
+            margin-bottom: 20px;
+        }
+
+        /* Personal Signature */
+        .signature {
+            position: fixed;
+            bottom: 20px;
+            font-size: 0.9rem;
+            color: #a1887f;
+            opacity: 0.7;
+        }
+
+        .container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+        }
+
+        /* The Fluffy Teddy Filter */
+        .teddy-fill {
+            fill: #a1887f;
+            opacity: 0;
+            filter: url(#fluff-filter);
+        }
+
+        .outline {
+            fill: transparent;
+            stroke: #5d4037;
+            stroke-width: 2.5;
+            stroke-dasharray: 1200;
+            stroke-dashoffset: 1200;
+        }
+
+        /* Animation Classes (Triggered by JS) */
+        .animate-draw { animation: drawOutline 4s ease-in-out forwards; }
+        .animate-fill { animation: fillIn 2s ease-in forwards 3s; }
+        .animate-text { animation: fadeIn 1.5s forwards 5s; }
+        .flower-fade { opacity: 0; animation: fadeIn 1.5s forwards 4.5s; }
+
+        @keyframes drawOutline { to { stroke-dashoffset: 0; } }
+        @keyframes fillIn { to { opacity: 1; } }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .floating-teddy { animation: sway 4s ease-in-out infinite; }
+        @keyframes sway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="start-btn">Click for a surprise 🧸</button>
+
+    <div id="main-content" class="hidden" style="text-align: center;">
+        <div class="greeting" id="msg">Good Morning</div>
+        
+        <div class="container">
+            <svg viewBox="0 0 200 220" class="floating-teddy">
+                <defs>
+                    <filter id="fluff-filter">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" />
+                        <feDisplacementMap in="SourceGraphic" scale="6" />
+                    </filter>
+                </defs>
+
+                <!-- Teddy Fill -->
+                <path id="t-fill" class="teddy-fill" d="M 100,180 C 60,180 40,150 40,110 C 40,80 60,60 100,60 C 140,60 160,80 160,110 C 160,150 140,180 100,180 Z M 70,65 C 50,30 30,50 45,75 M 130,65 C 150,30 170,50 155,75" />
+
+                <!-- Teddy Outline -->
+                <path id="t-outline" class="outline" d="M 100,180 C 60,180 40,150 40,110 C 40,80 60,60 100,60 C 140,60 160,80 160,110 C 160,150 140,180 100,180 Z M 70,65 C 50,30 30,50 45,75 M 130,65 C 150,30 170,50 155,75 M 85,110 Q 100,120 115,110" />
+
+                <!-- Face & Bouquet -->
+                <g id="extras" class="flower-fade">
+                    <circle cx="85" cy="95" r="2.5" fill="#3e2723"/>
+                    <circle cx="115" cy="95" r="2.5" fill="#3e2723"/>
+                    <ellipse cx="100" cy="102" rx="4" ry="2.5" fill="#5d4037"/>
+                    
+                    <path d="M 140,140 L 165,115 M 140,140 L 175,130" stroke="#4caf50" stroke-width="2"/>
+                    <circle cx="165" cy="115" r="6" fill="#f48fb1" />
+                    <circle cx="175" cy="130" r="5" fill="#ce93d8" />
+                    <circle cx="155" cy="125" r="4" fill="#fff59d" />
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Your personal signature -->
+    <div class="signature">hehehehehehe</div>
+
+    <script>
+        const btn = document.getElementById('start-btn');
+        const content = document.getElementById('main-content');
+        
+        btn.addEventListener('click', () => {
+            btn.classList.add('hidden');
+            content.classList.remove('hidden');
+            
+            // Start animations
+            document.getElementById('t-outline').classList.add('animate-draw');
+            document.getElementById('t-fill').classList.add('animate-fill');
+            document.getElementById('msg').classList.add('animate-text');
+        });
+    </script>
+</body>
+</html>
