@@ -3,152 +3,499 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Surprise for You 🐰</title>
-    <!-- Bunny Web Icon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐰</text></svg>">
-    
+    <title>Happy Birthday Card</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         body {
+            background-color: #f7d6e0;
             display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Phone frame simulation */
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            background-color: #fff;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            border: 12px solid #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar Styling matching v15044gf0000d4p2tqvog65lrtqjjse0.MP4 */
+        .app-header {
+            background-color: #b5e2fa;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #95d5ee;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Screens Manager */
+        .screen {
+            flex: 1;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            background-color: #fdf6f0;
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Georgia', serif;
+            padding: 20px;
+            text-align: center;
+            position: relative;
         }
 
-        /* Start Button to make it feel interactive */
-        #start-btn {
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            background-color: #ffb7c5;
+        .screen.active {
+            display: flex;
+        }
+
+        /* --- SCREEN 1: INTERACTIVE MIC CAKE --- */
+        .cake-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .cake {
+            width: 100%;
+            height: 120px;
+            background: #643a22; /* Chocolate layers */
+            border-radius: 20px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: inset 0 15px 0 #ffb3c6; /* Pink frosting */
+        }
+
+        .candles-row {
+            display: flex;
+            justify-content: space-around;
+            width: 120px;
+            position: absolute;
+            bottom: 120px;
+            left: 40px;
+        }
+
+        .candle {
+            width: 12px;
+            height: 50px;
+            background: linear-gradient(to bottom, #ffea00, #ff9100);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .flame {
+            width: 16px;
+            height: 24px;
+            background: #ff5722;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -24px;
+            left: -2px;
+            animation: flicker 0.3s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1); background: #ff5722; }
+            100% { transform: scale(1.1) skewX(5deg); background: #ff9800; }
+        }
+
+        .action-btn {
+            background-color: #ff4d6d;
             color: white;
             border: none;
-            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 30px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: 0.3s;
-            z-index: 10;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+            transition: transform 0.2s;
+            margin-bottom: 15px;
         }
 
-        #start-btn:hover {
-            background-color: #ff8fab;
-            transform: scale(1.05);
+        .action-btn:active {
+            transform: scale(0.95);
         }
 
-        .hidden { display: none !important; }
+        .blow-prompt {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ff4d6d;
+            margin-top: 10px;
+            letter-spacing: 2px;
+            animation: pulse 1s infinite alternate;
+            display: none;
+        }
 
-        /* The Greeting Text */
-        .greeting {
-            font-size: 2.5rem;
+        .fallback-text {
+            font-size: 12px;
+            color: #888;
             font-style: italic;
-            color: #6d4c41;
-            opacity: 0;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* --- SCREEN 2 & 3: THE CARD --- */
+        .card-page {
+            background-color: #e8f5e9;
+            width: 100%;
+            height: 85%;
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .card-title {
+            font-family: 'Georgia', serif;
+            color: #2e7d32;
+            font-size: 24px;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+
+        /* Birthday Cake Illustration on Card Cover */
+        .card-cake {
+            width: 160px;
+            height: 160px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
             margin-bottom: 20px;
         }
 
-        /* Personal Signature */
-        .signature {
-            position: fixed;
-            bottom: 20px;
-            font-size: 0.9rem;
-            color: #a1887f;
-            opacity: 0.7;
-        }
-
-        .container {
+        .card-cake-body {
+            width: 140px;
+            height: 90px;
+            background-color: #ffb3c6; /* Pink cake */
+            border: 4px solid #333;
+            border-radius: 12px 12px 4px 4px;
             position: relative;
-            width: 350px;
-            height: 350px;
+            box-shadow: inset 0 -15px 0 #f48c06; /* Yellow layer frosting */
         }
 
-        /* The Fluffy Teddy Filter */
-        .teddy-fill {
-            fill: #a1887f;
-            opacity: 0;
-            filter: url(#fluff-filter);
+        .card-cake-frosting {
+            width: 140px;
+            height: 20px;
+            background-color: #fff; /* White drip frosting top */
+            border-bottom: 4px solid #333;
+            position: absolute;
+            top: 0;
+            left: -4px;
+            border-radius: 12px 12px 0 0;
         }
 
-        .outline {
-            fill: transparent;
-            stroke: #5d4037;
-            stroke-width: 2.5;
-            stroke-dasharray: 1200;
-            stroke-dashoffset: 1200;
+        .card-candle {
+            width: 10px;
+            height: 35px;
+            background-color: #4ea8de;
+            border: 3px solid #333;
+            border-bottom: none;
+            position: absolute;
+            bottom: 86px;
+            z-index: 2;
         }
 
-        /* Animation Classes (Triggered by JS) */
-        .animate-draw { animation: drawOutline 4s ease-in-out forwards; }
-        .animate-fill { animation: fillIn 2s ease-in forwards 3s; }
-        .animate-text { animation: fadeIn 1.5s forwards 5s; }
-        .flower-fade { opacity: 0; animation: fadeIn 1.5s forwards 4.5s; }
+        .card-flame {
+            width: 14px;
+            height: 20px;
+            background-color: #ff9100;
+            border: 3px solid #333;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            bottom: 118px;
+            z-index: 3;
+            animation: flicker 0.3s infinite alternate;
+        }
 
-        @keyframes drawOutline { to { stroke-dashoffset: 0; } }
-        @keyframes fillIn { to { opacity: 1; } }
-        @keyframes fadeIn { to { opacity: 1; } }
+        /* Floating Hearts */
+        .hearts-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .heart {
+            position: absolute;
+            color: #ff4d6d;
+            font-size: 20px;
+            animation: floatUp 2s infinite linear;
+        }
 
-        .floating-teddy { animation: sway 4s ease-in-out infinite; }
-        @keyframes sway {
-            0%, 100% { transform: rotate(-2deg); }
-            50% { transform: rotate(2deg); }
+        @keyframes floatUp {
+            0% { transform: translateY(20px) scale(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
+        }
+
+        /* Page 2 specifics */
+        .page2-bg {
+            background-color: #fff0f3;
+        }
+        .photo-slot {
+            width: 180px;
+            height: 180px;
+            background-color: #ddd;
+            border: 6px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transform: rotate(-3deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .photo-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .letter-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #4a4a4a;
+            text-align: left;
+            overflow-y: auto;
+            max-height: 220px;
+            padding-right: 5px;
+        }
+
+        /* Navigation Controls */
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 15px 30px;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-arrow {
+            font-size: 24px;
+            color: #ff4d6d;
+            cursor: pointer;
+            user-select: none;
+            font-weight: bold;
+        }
+        .nav-arrow.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        .page-indicator {
+            font-size: 14px;
+            color: #777;
         }
     </style>
 </head>
 <body>
 
-    <button id="start-btn">Click for a surprise 🧸</button>
+    <div class="phone-container">
+        <!-- Inside Webview App Header -->
+        <div class="app-header">
+            Card from Nimi
+            <span class="close-btn"></span>
+        </div>
 
-    <div id="main-content" class="hidden" style="text-align: center;">
-        <div class="greeting" id="msg">Good Morning</div>
-        
-        <div class="container">
-            <svg viewBox="0 0 200 220" class="floating-teddy">
-                <defs>
-                    <filter id="fluff-filter">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" />
-                        <feDisplacementMap in="SourceGraphic" scale="6" />
-                    </filter>
-                </defs>
+        <!-- SCREEN 1: Blow out the candles -->
+        <div id="screen-candles" class="screen active">
+            <h2 style="margin-bottom: 10px; color: #4a4a4a;">Blow Out The Candles</h2>
+            
+            <div class="cake-container" title="Click cake to bypass mic setup">
+                <div class="candles-row">
+                    <div class="candle"><div class="flame"></div></div>
+                    <div class="candle"><div class="flame"></div></div>
+                    <div class="candle"><div class="flame"></div></div>
+                </div>
+                <div class="cake"></div>
+            </div>
+            
+            <button id="mic-btn" class="action-btn">Allow Access to Mic</button>
+            <div id="blow-text" class="blow-prompt">BLOW!</div>
+            <p class="fallback-text">(Or click the cake to open card)</p>
+        </div>
 
-                <!-- Teddy Fill -->
-                <path id="t-fill" class="teddy-fill" d="M 100,180 C 60,180 40,150 40,110 C 40,80 60,60 100,60 C 140,60 160,80 160,110 C 160,150 140,180 100,180 Z M 70,65 C 50,30 30,50 45,75 M 130,65 C 150,30 170,50 155,75" />
+        <!-- SCREEN 2: Card Cover (Cake illustration) -->
+        <div id="screen-card1" class="screen">
+            <div class="card-page">
+                <div class="hearts-container">
+                    <span class="heart" style="top:20%; left:20%; animation-delay: 0s;">❤️</span>
+                    <span class="heart" style="top:40%; left:80%; animation-delay: 0.5s;">❤️</span>
+                    <span class="heart" style="top:70%; left:15%; animation-delay: 1s;">❤️</span>
+                </div>
+                <h2 class="card-title">Happy birthday Dewii</h2>
+                
+                <div class="card-cake">
+                    <div class="card-flame"></div>
+                    <div class="card-candle"></div>
+                    <div class="card-cake-body">
+                        <div class="card-cake-frosting"></div>
+                    </div>
+                </div>
+                <div></div> <!-- spacing element -->
+            </div>
+        </div>
 
-                <!-- Teddy Outline -->
-                <path id="t-outline" class="outline" d="M 100,180 C 60,180 40,150 40,110 C 40,80 60,60 100,60 C 140,60 160,80 160,110 C 160,150 140,180 100,180 Z M 70,65 C 50,30 30,50 45,75 M 130,65 C 150,30 170,50 155,75 M 85,110 Q 100,120 115,110" />
+        <!-- SCREEN 3: Card Message & Photo -->
+        <div id="screen-card2" class="screen">
+            <div class="card-page page2-bg">
+                <div class="photo-slot">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400" alt="Birthday Friend">
+                </div>
+                
+                <div class="letter-text">
+                    <p><strong>Happy happy birthday dewii! 🥳🎉</strong></p><br>
+                    <p>It's really hard to put into words how much you mean to me tbh, but know that I'm forever grateful to the universe for allowing our paths to cross.</p><br>
+                    <p>Thank you for being such an amazing friend to me. I pray this new year brings so much joy, growth and happiness into your life. ❤️</p>
+                </div>
+            </div>
+        </div>
 
-                <!-- Face & Bouquet -->
-                <g id="extras" class="flower-fade">
-                    <circle cx="85" cy="95" r="2.5" fill="#3e2723"/>
-                    <circle cx="115" cy="95" r="2.5" fill="#3e2723"/>
-                    <ellipse cx="100" cy="102" rx="4" ry="2.5" fill="#5d4037"/>
-                    
-                    <path d="M 140,140 L 165,115 M 140,140 L 175,130" stroke="#4caf50" stroke-width="2"/>
-                    <circle cx="165" cy="115" r="6" fill="#f48fb1" />
-                    <circle cx="175" cy="130" r="5" fill="#ce93d8" />
-                    <circle cx="155" cy="125" r="4" fill="#fff59d" />
-                </g>
-            </svg>
+        <!-- Global Pagination Footer -->
+        <div id="card-footer" class="footer-nav" style="display: none;">
+            <span id="prev-btn" class="nav-arrow disabled">‹</span>
+            <span id="page-num" class="page-indicator">Page 1 of 2</span>
+            <span id="next-btn" class="nav-arrow">›</span>
         </div>
     </div>
 
-    <!-- Your personal signature -->
-    <div class="signature">hehehehehehe</div>
-
     <script>
-        const btn = document.getElementById('start-btn');
-        const content = document.getElementById('main-content');
+        const micBtn = document.getElementById('mic-btn');
+        const blowText = document.getElementById('blow-text');
+        const flames = document.querySelectorAll('.flame');
+        const footerNav = document.getElementById('card-footer');
         
-        btn.addEventListener('click', () => {
-            btn.classList.add('hidden');
-            content.classList.remove('hidden');
-            
-            // Start animations
-            document.getElementById('t-outline').classList.add('animate-draw');
-            document.getElementById('t-fill').classList.add('animate-fill');
-            document.getElementById('msg').classList.add('animate-text');
+        const screens = [
+            document.getElementById('screen-candles'),
+            document.getElementById('screen-card1'),
+            document.getElementById('screen-card2')
+        ];
+        let currentCardPage = 1;
+
+        // --- MICROPHONE DETECTION ---
+        micBtn.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                micBtn.style.display = 'none';
+                blowText.style.display = 'block';
+
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const analyser = audioContext.createAnalyser();
+                const source = audioContext.createMediaStreamSource(stream);
+                source.connect(analyser);
+                analyser.fftSize = 256;
+                
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+
+                function checkBlow() {
+                    analyser.getByteFrequencyData(dataArray);
+                    let sum = 0;
+                    for (let i = 0; i < bufferLength; i++) {
+                        sum += dataArray[i];
+                    }
+                    let average = sum / bufferLength;
+
+                    if (average > 45) { 
+                        extinguishAndProceed();
+                        stream.getTracks().forEach(track => track.stop());
+                        return;
+                    }
+                    requestAnimationFrame(checkBlow);
+                }
+                checkBlow();
+
+            } catch (err) {
+                alert("Microphone blocked or not supported. Just click the cake directly to view the card!");
+                console.error(err);
+            }
+        });
+
+        // Click-to-bypass shortcut
+        document.querySelector('.cake-container').addEventListener('click', () => {
+            extinguishAndProceed();
+        });
+
+        function extinguishAndProceed() {
+            flames.forEach(flame => flame.style.display = 'none');
+            setTimeout(() => {
+                screens[0].classList.remove('active');
+                screens[1].classList.add('active');
+                footerNav.style.display = 'flex';
+            }, 1000);
+        }
+
+        // --- PAGE CONTROLS ---
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const pageNumDisplay = document.getElementById('page-num');
+
+        function updatePageLayout() {
+            if (currentCardPage === 1) {
+                screens[1].classList.add('active');
+                screens[2].classList.remove('active');
+                prevBtn.classList.add('disabled');
+                nextBtn.classList.remove('disabled');
+                pageNumDisplay.innerText = "Page 1 of 2";
+            } else {
+                screens[1].classList.remove('active');
+                screens[2].classList.add('active');
+                prevBtn.classList.remove('disabled');
+                nextBtn.classList.add('disabled');
+                pageNumDisplay.innerText = "Page 2 of 2";
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentCardPage === 1) {
+                currentCardPage = 2;
+                updatePageLayout();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentCardPage === 2) {
+                currentCardPage = 1;
+                updatePageLayout();
+            }
         });
     </script>
 </body>
